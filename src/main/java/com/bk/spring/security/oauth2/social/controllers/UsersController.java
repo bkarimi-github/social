@@ -1,6 +1,8 @@
 package com.bk.spring.security.oauth2.social.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
@@ -18,6 +20,8 @@ import java.util.Map;
 @RestController
 public class UsersController {
 
+    Logger LOG = LoggerFactory.getLogger(UsersController.class);
+
     @Autowired ObjectMapper objectMapper;
 
     @GetMapping("/user")
@@ -27,13 +31,13 @@ public class UsersController {
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken)context.getAuthentication();
         String authClientID = authToken.getAuthorizedClientRegistrationId();
         String principalID = (authToken.getPrincipal()).getName();
-        System.out.println(principal.getClass().getName() + " " + principal.getClass().getCanonicalName());
-        System.out.println("Calling User Details Endpoint.");
+        LOG.info(principal.getClass().getName() + " " + principal.getClass().getCanonicalName());
+        LOG.debug("Calling User Details Endpoint.");
         String json = objectMapper.writeValueAsString(principal.getAttributes());
-        System.out.println(json);
+        LOG.info("OAuth JSON: " + json);
         for(String attributeName : principal.getAttributes().keySet())
         {
-            System.out.println(attributeName);
+            LOG.debug(attributeName);
         }
         String userName = authClientID.equalsIgnoreCase("google") ? principal.getAttribute("name") : (authClientID.equalsIgnoreCase("github") ? principal.getAttribute("login") : principalID);
         return Collections.singletonMap("name", userName + " (" + principalID + ")");
