@@ -1,0 +1,15 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: 57431bbe0cf519b7317f
+            clientSecret: 6c596a89b1918b17e9fd998efe801ea5edd8b00e
+          google:
+            clientId: 302887751070-9pu7rdnnm9ogejkov7kf5d7kmhd9r0qc.apps.googleusercontent.com
+            clientSecret: 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
+server:
+  servlet:
+    session:
+      timeout: 60s
